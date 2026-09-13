@@ -1,0 +1,19 @@
+[project]
+name = "batoul-mlops"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "younes285", email = "mostafa.younes2004@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pillow>=12.3.0",
+]
+
+[project.scripts]
+batoul-mlops = "batoul_mlops:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
