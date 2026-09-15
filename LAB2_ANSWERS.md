@@ -1,7 +1,7 @@
 # Lab 2 - Model Training and Experiment Tracking with MLflow
 
-## Question 1
-### Look at `pyproject.toml` and `uv.lock`. What changed?
+Question 1
+Look at `pyproject.toml` and `uv.lock`. What changed?
 
 After installing the libraries needed for this lab, `pyproject.toml` was updated with new dependencies such as `mlflow`, `torch`, `torchvision`, and `scikit-learn`.
 
@@ -11,8 +11,8 @@ The `uv.lock` file was also updated. It contains the exact versions of the insta
 
 ---
 
-## Question 2
-### What is `--backend-store-uri` used for? What is `--default-artifact-root` used for? What is the difference between metadata and artifacts?
+Question 2
+What is `--backend-store-uri` used for? What is `--default-artifact-root` used for? What is the difference between metadata and artifacts?
 
 `--backend-store-uri sqlite:///mlflow.db` tells MLflow where to store the experiment metadata.
 
@@ -28,10 +28,9 @@ This includes information such as:
 
 The difference is that metadata describes the run and its results, while artifacts are the actual files produced during the experiment.
 
----
 
-## Question 3
-### Why shouldn't `mlflow.db` and `mlruns/` be tracked by Git, and why shouldn't they be tracked by DVC either?
+Question 3
+Why shouldn't `mlflow.db` and `mlruns/` be tracked by Git, and why shouldn't they be tracked by DVC either?
 
 `mlflow.db` and `mlruns/` are generated locally when experiments are run. They are not source code and they can change frequently.
 
@@ -41,10 +40,8 @@ They also do not need to be tracked by DVC because MLflow already manages experi
 
 In this project, Git is used for the code, DVC is used for the datasets, and MLflow is used for tracking experiments and their outputs.
 
----
-
-## Question 4
-### What happens the first time you call `set_experiment` with a name that does not exist yet?
+Question 4
+What happens the first time you call `set_experiment` with a name that does not exist yet?
 
 The first time I called:
 
