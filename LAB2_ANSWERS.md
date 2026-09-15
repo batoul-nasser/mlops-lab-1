@@ -47,6 +47,8 @@ The first time I called:
 
 ```python
 mlflow.set_experiment("food11")
+MLflow detected that the experiment did not exist and created it automatically.
+After that, the food11 experiment appeared in the MLflow interface, and the training runs were logged under it.
 
 Question 5
 What is the difference between mlflow.log_param and mlflow.log_metric? Why does log_metric take a step argument and log_param does not?
