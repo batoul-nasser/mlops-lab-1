@@ -1,14 +1,14 @@
 import argparse
+import os
 from pathlib import Path
 
-import mlflow
 import mlflow.pytorch
 import torch
-import torch.nn as nn
-import torch.optim as optim
+from torch import nn, optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, models, transforms
 
+import mlflow
 
 NUM_CLASSES = 11
 
@@ -123,7 +123,7 @@ def evaluate(model, loader, criterion, device):
 def main():
     args = parse_args()
 
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "http://127.0.0.1:5000"))
     mlflow.set_experiment("food11")
 
     device = torch.device(
@@ -157,6 +157,7 @@ def main():
                 "lr": args.lr,
                 "batch_size": args.batch_size,
                 "model": "resnet18",
+                "test_size": len(test_loader.dataset),
             }
         )
 

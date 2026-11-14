@@ -1,11 +1,13 @@
 import os
 from io import BytesIO
+from typing import Annotated
 
-import mlflow
 import torch
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image
 from torchvision import transforms
+
+import mlflow
 
 app = FastAPI()
 
@@ -14,14 +16,7 @@ MLFLOW_TRACKING_URI = os.getenv(
     "http://127.0.0.1:5000",
 )
 
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-
-model = mlflow.pytorch.load_model(
-    "models:/food11@champion",
-    map_location="cpu",
-)
-
-model.eval()
+model = None
 
 CLASS_NAMES = [
     "Bread",
@@ -43,18 +38,44 @@ transform = transforms.Compose([
 ])
 
 
+@app.on_event("startup")
+def load_model():
+    global model
+
+    if os.environ.get("SKIP_MODEL"):
+        return
+
+    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+    model = mlflow.pytorch.load_model(
+        "models:/food11@champion",
+        map_location="cpu",
+    )
+
+    model.eval()
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(file: Annotated[UploadFile, File()]):
+    if model is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Model is not loaded",
+        )
+
     contents = await file.read()
 
-    image = Image.open(BytesIO(contents)).convert("RGB")
+    image = Image.open(
+        BytesIO(contents)
+    ).convert("RGB")
 
-    tensor = transform(image).unsqueeze(0)
+    tensor = transform(
+        image
+    ).unsqueeze(0)
 
     with torch.no_grad():
         output = model(tensor)
