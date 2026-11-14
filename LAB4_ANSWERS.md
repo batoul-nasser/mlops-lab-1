@@ -1,4 +1,3 @@
-Here are the Lab 4 answers Q1–Q11, based directly on your lab file and on what you actually observed while running it.
 Q1. What happens to everything written to /mlflow-data if no volume is mounted?
 If no volume is mounted, everything written to /mlflow-data stays inside that specific container’s writable filesystem.
 If I stop and remove that container, then create a new container from the same image, the MLflow database and artifacts are gone. The new container starts with an empty MLflow UI.
